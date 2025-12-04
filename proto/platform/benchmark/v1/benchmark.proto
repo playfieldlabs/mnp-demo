@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package platform.benchmark.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "platform/common/v1/types.proto";
+import "platform/reward/v1/reward.proto";
+import "platform/dataset/v1/prompt_dataset.proto";
+
+message BenchmarkRun {
+  string id = 1;
+  string agent_id = 2;
+  string prompt_dataset_id = 3;
+  repeated BenchmarkRunRow rows = 4;
+  AggregatedReward final_reward = 5;
+  platform.common.v1.Status status = 6;
+  google.protobuf.Timestamp started_at = 7;
+  google.protobuf.Timestamp finished_at = 8;
+  BenchmarkConfig config = 9;
+}
+
+message BenchmarkRunRow {
+  string id = 1;
+  string prompt_dataset_row_id = 2;
+  platform.reward.v1.RewardResult reward = 3;
+  repeated string agent_run_ids = 4;
+  repeated platform.dataset.v1.SMEComment sme_comments = 5;
+  platform.common.v1.Status status = 6;
+}
+
+message AggregatedReward {
+  float mean_score = 1;
+  float median_score = 2;
+  float min_score = 3;
+  float max_score = 4;
+  float std_dev = 5;
+  int32 total_runs = 6;
+  int32 successful_runs = 7;
+  google.protobuf.Duration total_latency = 8;
+  google.protobuf.Duration avg_latency = 9;
+  repeated PolicyAggregation policy_aggregations = 10;
+}
+
+message PolicyAggregation {
+  string policy_agent_id = 1;
+  float mean_score = 2;
+  int32 pass_count = 3;
+  int32 fail_count = 4;
+}
+
+message BenchmarkConfig {
+  int32 runs_per_prompt = 1;
+  int32 max_parallel_runs = 2;
+  bool save_trajectories = 3;
+}
+
+message BenchmarkComparison {
+  string id = 1;
+  repeated string benchmark_run_ids = 2;
+  ComparisonResult result = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message ComparisonResult {
+  string best_agent_id = 1;
+  repeated AgentPerformance agent_performances = 2;
+}
+
+message AgentPerformance {
+  string agent_id = 1;
+  string benchmark_run_id = 2;
+  AggregatedReward reward = 3;
+}
+

@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package platform.service.v1;
+
+import "platform/trajectory/v1/trajectory.proto";
+import "platform/common/v1/types.proto";
+
+service TrajectoryService {
+  rpc GetTrajectory(GetTrajectoryRequest) returns (GetTrajectoryResponse);
+  rpc ListTrajectories(ListTrajectoriesRequest) returns (ListTrajectoriesResponse);
+  rpc AnnotateTrajectory(AnnotateTrajectoryRequest) returns (AnnotateTrajectoryResponse);
+  rpc AnnotateStep(AnnotateStepRequest) returns (AnnotateStepResponse);
+  rpc ExportTrajectories(ExportTrajectoriesRequest) returns (stream ExportTrajectoriesResponse);
+}
+
+message GetTrajectoryRequest {
+  string trajectory_id = 1;
+}
+
+message GetTrajectoryResponse {
+  platform.trajectory.v1.Trajectory trajectory = 1;
+}
+
+message ListTrajectoriesRequest {
+  platform.trajectory.v1.TrajectoryFilter filter = 1;
+  platform.common.v1.Pagination pagination = 2;
+}
+
+message ListTrajectoriesResponse {
+  repeated platform.trajectory.v1.Trajectory trajectories = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message AnnotateTrajectoryRequest {
+  string trajectory_id = 1;
+  platform.trajectory.v1.TrajectoryLabel label = 2;
+  string notes = 3;
+}
+
+message AnnotateTrajectoryResponse {
+  platform.trajectory.v1.TrajectoryAnnotation annotation = 1;
+}
+
+message AnnotateStepRequest {
+  string trajectory_id = 1;
+  string block_id = 2;
+  platform.trajectory.v1.StepLabel label = 3;
+  string feedback = 4;
+}
+
+message AnnotateStepResponse {
+  platform.trajectory.v1.StepAnnotation annotation = 1;
+}
+
+message ExportTrajectoriesRequest {
+  platform.trajectory.v1.TrajectoryFilter filter = 1;
+  ExportFormat format = 2;
+}
+
+message ExportTrajectoriesResponse {
+  bytes data = 1;
+}
+
+enum ExportFormat {
+  EXPORT_FORMAT_UNSPECIFIED = 0;
+  EXPORT_FORMAT_JSONL = 1;
+  EXPORT_FORMAT_PARQUET = 2;
+}
+

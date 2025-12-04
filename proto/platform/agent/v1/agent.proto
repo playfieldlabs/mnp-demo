@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package platform.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Agent {
+  string id = 1;
+  string name = 2;
+  string task = 3;
+  repeated string tool_ids = 4;
+  string system_prompt = 5;
+  repeated string policy_agent_ids = 6;
+  AgentConfig config = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message AgentConfig {
+  string model = 1;
+  float temperature = 2;
+  int32 max_tokens = 3;
+  int32 max_tool_calls = 4;
+}
+

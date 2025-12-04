@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package platform.reward.v1;
+
+import "google/protobuf/duration.proto";
+import "platform/agent/v1/agent.proto";
+import "platform/tool/v1/tool.proto";
+import "platform/tool/v1/tool_call.proto";
+
+message RewardAgent {
+  platform.agent.v1.Agent agent = 1;
+  platform.tool.v1.ForceFinalToolCall force_final_tool_call = 2;
+}
+
+message RewardTool {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message RewardResult {
+  string id = 1;
+  float score = 2;
+  string reasoning = 3;
+  repeated string policy_agent_ids = 4;
+  google.protobuf.Duration latency = 5;
+  int32 tool_call_count = 6;
+  repeated RewardBreakdown breakdown = 7;
+}
+
+message RewardBreakdown {
+  string policy_agent_id = 1;
+  float score = 2;
+  string reasoning = 3;
+}
+
+message RewardAgentUpdate {
+  string reward_agent_id = 1;
+  repeated UpdateComment comments = 2;
+}
+
+message UpdateComment {
+  string id = 1;
+  string author_id = 2;
+  string content = 3;
+  CommentType type = 4;
+}
+
+enum CommentType {
+  COMMENT_TYPE_UNSPECIFIED = 0;
+  COMMENT_TYPE_FEEDBACK = 1;
+  COMMENT_TYPE_CORRECTION = 2;
+  COMMENT_TYPE_SUGGESTION = 3;
+}
+

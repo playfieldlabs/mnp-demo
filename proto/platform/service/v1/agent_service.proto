@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package platform.service.v1;
+
+import "platform/agent/v1/agent.proto";
+import "platform/agent/v1/agent_run.proto";
+import "platform/agent/v1/block.proto";
+import "platform/common/v1/types.proto";
+
+service AgentService {
+  rpc CreateAgent(CreateAgentRequest) returns (CreateAgentResponse);
+  rpc GetAgent(GetAgentRequest) returns (GetAgentResponse);
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse);
+  rpc UpdateAgent(UpdateAgentRequest) returns (UpdateAgentResponse);
+  rpc DeleteAgent(DeleteAgentRequest) returns (DeleteAgentResponse);
+  rpc RunAgent(RunAgentRequest) returns (RunAgentResponse);
+  rpc StreamAgentRun(StreamAgentRunRequest) returns (stream StreamAgentRunResponse);
+  rpc GetAgentRun(GetAgentRunRequest) returns (GetAgentRunResponse);
+  rpc ListAgentRuns(ListAgentRunsRequest) returns (ListAgentRunsResponse);
+}
+
+message CreateAgentRequest {
+  platform.agent.v1.Agent agent = 1;
+}
+
+message CreateAgentResponse {
+  platform.agent.v1.Agent agent = 1;
+}
+
+message GetAgentRequest {
+  string agent_id = 1;
+}
+
+message GetAgentResponse {
+  platform.agent.v1.Agent agent = 1;
+}
+
+message ListAgentsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListAgentsResponse {
+  repeated platform.agent.v1.Agent agents = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message UpdateAgentRequest {
+  platform.agent.v1.Agent agent = 1;
+}
+
+message UpdateAgentResponse {
+  platform.agent.v1.Agent agent = 1;
+}
+
+message DeleteAgentRequest {
+  string agent_id = 1;
+}
+
+message DeleteAgentResponse {}
+
+message RunAgentRequest {
+  string agent_id = 1;
+  string input = 2;
+  repeated string dataset_ids = 3;
+}
+
+message RunAgentResponse {
+  platform.agent.v1.AgentRun agent_run = 1;
+}
+
+message StreamAgentRunRequest {
+  string agent_id = 1;
+  string input = 2;
+  repeated string dataset_ids = 3;
+}
+
+message StreamAgentRunResponse {
+  oneof event {
+    platform.agent.v1.Block block = 1;
+    platform.agent.v1.AgentRun completed = 2;
+    AgentRunError error = 3;
+  }
+}
+
+message AgentRunError {
+  string code = 1;
+  string message = 2;
+}
+
+message GetAgentRunRequest {
+  string run_id = 1;
+}
+
+message GetAgentRunResponse {
+  platform.agent.v1.AgentRun agent_run = 1;
+}
+
+message ListAgentRunsRequest {
+  string agent_id = 1;
+  platform.common.v1.Pagination pagination = 2;
+}
+
+message ListAgentRunsResponse {
+  repeated platform.agent.v1.AgentRun agent_runs = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+

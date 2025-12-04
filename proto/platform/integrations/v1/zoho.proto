@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package platform.integrations.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "platform/tool/v1/tool.proto";
+
+message ZohoExpenseTool {
+  platform.tool.v1.Tool tool = 1;
+  ZohoConfig config = 2;
+}
+
+message ZohoPoliciesToolOutput {
+  repeated ZohoPolicy policies = 1;
+}
+
+message ZohoPolicy {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string rules = 4;
+  bool is_active = 5;
+}
+
+message ZohoExpense {
+  string id = 1;
+  string employee_id = 2;
+  string category = 3;
+  double amount = 4;
+  string currency = 5;
+  google.protobuf.Timestamp date = 6;
+  string description = 7;
+  repeated string receipt_urls = 8;
+  ZohoExpenseStatus status = 9;
+  google.protobuf.Struct metadata = 10;
+}
+
+enum ZohoExpenseStatus {
+  ZOHO_EXPENSE_STATUS_UNSPECIFIED = 0;
+  ZOHO_EXPENSE_STATUS_DRAFT = 1;
+  ZOHO_EXPENSE_STATUS_SUBMITTED = 2;
+  ZOHO_EXPENSE_STATUS_APPROVED = 3;
+  ZOHO_EXPENSE_STATUS_REJECTED = 4;
+  ZOHO_EXPENSE_STATUS_REIMBURSED = 5;
+}
+
+message ZohoConfig {
+  string organization_id = 1;
+  string api_endpoint = 2;
+}
+

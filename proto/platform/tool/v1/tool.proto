@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package platform.tool.v1;
+
+import "google/protobuf/struct.proto";
+
+message Tool {
+  string id = 1;
+  string name = 2;
+  google.protobuf.Struct input_schema = 3;
+  google.protobuf.Struct output_schema = 4;
+  string context = 5;
+}
+
+message ToolRegistry {
+  repeated Tool tools = 1;
+}
+

@@ -1,0 +1,10 @@
+gen/
+__pycache__/
+*.pyc
+.pixi/
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+

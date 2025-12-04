@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package platform.service.v1;
+
+import "platform/tool/v1/tool.proto";
+import "platform/policy/v1/policy.proto";
+import "platform/common/v1/types.proto";
+
+service ToolService {
+  rpc CreateTool(CreateToolRequest) returns (CreateToolResponse);
+  rpc GetTool(GetToolRequest) returns (GetToolResponse);
+  rpc ListTools(ListToolsRequest) returns (ListToolsResponse);
+  rpc UpdateTool(UpdateToolRequest) returns (UpdateToolResponse);
+  rpc DeleteTool(DeleteToolRequest) returns (DeleteToolResponse);
+  rpc CreatePolicyAgent(CreatePolicyAgentRequest) returns (CreatePolicyAgentResponse);
+  rpc GetPolicyAgent(GetPolicyAgentRequest) returns (GetPolicyAgentResponse);
+  rpc ListPolicyAgents(ListPolicyAgentsRequest) returns (ListPolicyAgentsResponse);
+}
+
+message CreateToolRequest {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message CreateToolResponse {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message GetToolRequest {
+  string tool_id = 1;
+}
+
+message GetToolResponse {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message ListToolsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListToolsResponse {
+  repeated platform.tool.v1.Tool tools = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message UpdateToolRequest {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message UpdateToolResponse {
+  platform.tool.v1.Tool tool = 1;
+}
+
+message DeleteToolRequest {
+  string tool_id = 1;
+}
+
+message DeleteToolResponse {}
+
+message CreatePolicyAgentRequest {
+  platform.policy.v1.PolicyAgent policy_agent = 1;
+}
+
+message CreatePolicyAgentResponse {
+  platform.policy.v1.PolicyAgent policy_agent = 1;
+}
+
+message GetPolicyAgentRequest {
+  string policy_agent_id = 1;
+}
+
+message GetPolicyAgentResponse {
+  platform.policy.v1.PolicyAgent policy_agent = 1;
+}
+
+message ListPolicyAgentsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListPolicyAgentsResponse {
+  repeated platform.policy.v1.PolicyAgent policy_agents = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package platform.common.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_AWAITING_START = 1;
+  STATUS_RUNNING = 2;
+  STATUS_DONE = 3;
+  STATUS_ERROR = 4;
+}
+
+message Metadata {
+  string id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+message Pagination {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message PaginationResponse {
+  string next_page_token = 1;
+  int32 total_count = 2;
+}
+

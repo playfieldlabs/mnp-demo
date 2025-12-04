@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package platform.tool.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+message ToolCall {
+  string id = 1;
+  string tool_id = 2;
+  google.protobuf.Struct input = 3;
+  google.protobuf.Struct output = 4;
+  google.protobuf.Timestamp started_at = 5;
+  google.protobuf.Duration duration = 6;
+}
+
+message ForceFinalToolCall {
+  string tool_id = 1;
+  google.protobuf.Struct forced_output_schema = 2;
+}
+

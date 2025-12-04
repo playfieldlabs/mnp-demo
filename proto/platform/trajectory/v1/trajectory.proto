@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package platform.trajectory.v1;
+
+import "google/protobuf/timestamp.proto";
+import "platform/agent/v1/agent_run.proto";
+import "platform/reward/v1/reward.proto";
+
+message Trajectory {
+  string id = 1;
+  string agent_id = 2;
+  platform.agent.v1.AgentRun agent_run = 3;
+  platform.reward.v1.RewardResult reward = 4;
+  TrajectoryAnnotation annotation = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message TrajectoryAnnotation {
+  string annotator_id = 1;
+  TrajectoryLabel label = 2;
+  string notes = 3;
+  repeated StepAnnotation step_annotations = 4;
+  google.protobuf.Timestamp annotated_at = 5;
+}
+
+message StepAnnotation {
+  string block_id = 1;
+  StepLabel label = 2;
+  string feedback = 3;
+}
+
+enum TrajectoryLabel {
+  TRAJECTORY_LABEL_UNSPECIFIED = 0;
+  TRAJECTORY_LABEL_CORRECT = 1;
+  TRAJECTORY_LABEL_INCORRECT = 2;
+  TRAJECTORY_LABEL_PARTIAL = 3;
+  TRAJECTORY_LABEL_NEEDS_REVIEW = 4;
+}
+
+enum StepLabel {
+  STEP_LABEL_UNSPECIFIED = 0;
+  STEP_LABEL_CORRECT = 1;
+  STEP_LABEL_INCORRECT = 2;
+  STEP_LABEL_UNNECESSARY = 3;
+  STEP_LABEL_MISSING_CONTEXT = 4;
+}
+
+message TrajectoryFilter {
+  repeated string agent_ids = 1;
+  repeated TrajectoryLabel labels = 2;
+  float min_reward_score = 3;
+  float max_reward_score = 4;
+  google.protobuf.Timestamp created_after = 5;
+  google.protobuf.Timestamp created_before = 6;
+}
+

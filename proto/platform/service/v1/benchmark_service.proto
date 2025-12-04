@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package platform.service.v1;
+
+import "platform/benchmark/v1/benchmark.proto";
+import "platform/reward/v1/reward.proto";
+import "platform/dataset/v1/prompt_dataset.proto";
+import "platform/common/v1/types.proto";
+
+service BenchmarkService {
+  rpc CreateBenchmarkRun(CreateBenchmarkRunRequest) returns (CreateBenchmarkRunResponse);
+  rpc GetBenchmarkRun(GetBenchmarkRunRequest) returns (GetBenchmarkRunResponse);
+  rpc ListBenchmarkRuns(ListBenchmarkRunsRequest) returns (ListBenchmarkRunsResponse);
+  rpc StreamBenchmarkRun(StreamBenchmarkRunRequest) returns (stream StreamBenchmarkRunResponse);
+  rpc CompareBenchmarks(CompareBenchmarksRequest) returns (CompareBenchmarksResponse);
+  rpc AddBenchmarkComment(AddBenchmarkCommentRequest) returns (AddBenchmarkCommentResponse);
+  rpc CreateRewardAgent(CreateRewardAgentRequest) returns (CreateRewardAgentResponse);
+  rpc GetRewardAgent(GetRewardAgentRequest) returns (GetRewardAgentResponse);
+  rpc ListRewardAgents(ListRewardAgentsRequest) returns (ListRewardAgentsResponse);
+  rpc UpdateRewardAgent(UpdateRewardAgentRequest) returns (UpdateRewardAgentResponse);
+}
+
+message CreateBenchmarkRunRequest {
+  string agent_id = 1;
+  string prompt_dataset_id = 2;
+  platform.benchmark.v1.BenchmarkConfig config = 3;
+}
+
+message CreateBenchmarkRunResponse {
+  platform.benchmark.v1.BenchmarkRun benchmark_run = 1;
+}
+
+message GetBenchmarkRunRequest {
+  string benchmark_run_id = 1;
+}
+
+message GetBenchmarkRunResponse {
+  platform.benchmark.v1.BenchmarkRun benchmark_run = 1;
+}
+
+message ListBenchmarkRunsRequest {
+  string agent_id = 1;
+  platform.common.v1.Pagination pagination = 2;
+}
+
+message ListBenchmarkRunsResponse {
+  repeated platform.benchmark.v1.BenchmarkRun benchmark_runs = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message StreamBenchmarkRunRequest {
+  string benchmark_run_id = 1;
+}
+
+message StreamBenchmarkRunResponse {
+  oneof event {
+    platform.benchmark.v1.BenchmarkRunRow row_completed = 1;
+    platform.benchmark.v1.BenchmarkRun benchmark_completed = 2;
+    BenchmarkRunError error = 3;
+  }
+}
+
+message BenchmarkRunError {
+  string code = 1;
+  string message = 2;
+  string row_id = 3;
+}
+
+message CompareBenchmarksRequest {
+  repeated string benchmark_run_ids = 1;
+}
+
+message CompareBenchmarksResponse {
+  platform.benchmark.v1.BenchmarkComparison comparison = 1;
+}
+
+message AddBenchmarkCommentRequest {
+  string benchmark_run_id = 1;
+  string row_id = 2;
+  string content = 3;
+}
+
+message AddBenchmarkCommentResponse {
+  platform.dataset.v1.SMEComment comment = 1;
+}
+
+message CreateRewardAgentRequest {
+  platform.reward.v1.RewardAgent reward_agent = 1;
+}
+
+message CreateRewardAgentResponse {
+  platform.reward.v1.RewardAgent reward_agent = 1;
+}
+
+message GetRewardAgentRequest {
+  string reward_agent_id = 1;
+}
+
+message GetRewardAgentResponse {
+  platform.reward.v1.RewardAgent reward_agent = 1;
+}
+
+message ListRewardAgentsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListRewardAgentsResponse {
+  repeated platform.reward.v1.RewardAgent reward_agents = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message UpdateRewardAgentRequest {
+  platform.reward.v1.RewardAgentUpdate update = 1;
+}
+
+message UpdateRewardAgentResponse {
+  platform.reward.v1.RewardAgent reward_agent = 1;
+}
+

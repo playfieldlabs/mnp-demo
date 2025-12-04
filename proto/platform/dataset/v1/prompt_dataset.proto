@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package platform.dataset.v1;
+
+import "google/protobuf/timestamp.proto";
+import "platform/dataset/v1/dataset.proto";
+
+message PromptDataset {
+  string id = 1;
+  string name = 2;
+  repeated PromptDatasetRow rows = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message PromptDatasetRow {
+  string id = 1;
+  string prompt = 2;
+  string reward_agent_id = 3;
+  repeated GroundTruth ground_truths = 4;
+  repeated SMEComment sme_comments = 5;
+  int32 sequence = 6;
+}
+
+message SMEComment {
+  string id = 1;
+  string author_id = 2;
+  string content = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+

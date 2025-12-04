@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package platform.service.v1;
+
+import "platform/dataset/v1/dataset.proto";
+import "platform/dataset/v1/prompt_dataset.proto";
+import "platform/common/v1/types.proto";
+
+service DatasetService {
+  rpc CreateDataset(CreateDatasetRequest) returns (CreateDatasetResponse);
+  rpc GetDataset(GetDatasetRequest) returns (GetDatasetResponse);
+  rpc ListDatasets(ListDatasetsRequest) returns (ListDatasetsResponse);
+  rpc DeleteDataset(DeleteDatasetRequest) returns (DeleteDatasetResponse);
+  rpc UploadFile(stream UploadFileRequest) returns (UploadFileResponse);
+  rpc CreatePromptDataset(CreatePromptDatasetRequest) returns (CreatePromptDatasetResponse);
+  rpc GetPromptDataset(GetPromptDatasetRequest) returns (GetPromptDatasetResponse);
+  rpc ListPromptDatasets(ListPromptDatasetsRequest) returns (ListPromptDatasetsResponse);
+  rpc UpdatePromptDatasetRow(UpdatePromptDatasetRowRequest) returns (UpdatePromptDatasetRowResponse);
+  rpc AddSMEComment(AddSMECommentRequest) returns (AddSMECommentResponse);
+}
+
+message CreateDatasetRequest {
+  string name = 1;
+}
+
+message CreateDatasetResponse {
+  platform.dataset.v1.Dataset dataset = 1;
+}
+
+message GetDatasetRequest {
+  string dataset_id = 1;
+}
+
+message GetDatasetResponse {
+  platform.dataset.v1.Dataset dataset = 1;
+}
+
+message ListDatasetsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListDatasetsResponse {
+  repeated platform.dataset.v1.Dataset datasets = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message DeleteDatasetRequest {
+  string dataset_id = 1;
+}
+
+message DeleteDatasetResponse {}
+
+message UploadFileRequest {
+  oneof data {
+    UploadFileMetadata metadata = 1;
+    bytes chunk = 2;
+  }
+}
+
+message UploadFileMetadata {
+  string dataset_id = 1;
+  string filename = 2;
+  platform.dataset.v1.FileType file_type = 3;
+}
+
+message UploadFileResponse {
+  platform.dataset.v1.DatasetFile file = 1;
+}
+
+message CreatePromptDatasetRequest {
+  string name = 1;
+  repeated platform.dataset.v1.PromptDatasetRow rows = 2;
+}
+
+message CreatePromptDatasetResponse {
+  platform.dataset.v1.PromptDataset prompt_dataset = 1;
+}
+
+message GetPromptDatasetRequest {
+  string prompt_dataset_id = 1;
+}
+
+message GetPromptDatasetResponse {
+  platform.dataset.v1.PromptDataset prompt_dataset = 1;
+}
+
+message ListPromptDatasetsRequest {
+  platform.common.v1.Pagination pagination = 1;
+}
+
+message ListPromptDatasetsResponse {
+  repeated platform.dataset.v1.PromptDataset prompt_datasets = 1;
+  platform.common.v1.PaginationResponse pagination = 2;
+}
+
+message UpdatePromptDatasetRowRequest {
+  string prompt_dataset_id = 1;
+  platform.dataset.v1.PromptDatasetRow row = 2;
+}
+
+message UpdatePromptDatasetRowResponse {
+  platform.dataset.v1.PromptDatasetRow row = 1;
+}
+
+message AddSMECommentRequest {
+  string prompt_dataset_id = 1;
+  string row_id = 2;
+  string content = 3;
+}
+
+message AddSMECommentResponse {
+  platform.dataset.v1.SMEComment comment = 1;
+}
+

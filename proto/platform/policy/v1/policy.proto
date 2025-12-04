@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package platform.policy.v1;
+
+import "platform/tool/v1/tool.proto";
+
+message PolicyTool {
+  platform.tool.v1.Tool tool = 1;
+  string policy_content = 2;
+}
+
+message PolicyAgent {
+  string id = 1;
+  string name = 2;
+  string system_prompt = 3;
+  PolicyTool policy_tool = 4;
+}
+
+message PolicyEvaluation {
+  string policy_agent_id = 1;
+  bool passed = 2;
+  string reasoning = 3;
+  float confidence = 4;
+}
+

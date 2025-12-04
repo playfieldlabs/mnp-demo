@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package platform.dataset.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Dataset {
+  string id = 1;
+  string name = 2;
+  repeated DatasetFile files = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message DatasetFile {
+  string id = 1;
+  string filename = 2;
+  FileType file_type = 3;
+  string url = 4;
+  int64 size_bytes = 5;
+  string checksum = 6;
+}
+
+enum FileType {
+  FILE_TYPE_UNSPECIFIED = 0;
+  FILE_TYPE_PDF = 1;
+  FILE_TYPE_WORD = 2;
+  FILE_TYPE_CSV = 3;
+  FILE_TYPE_IMAGE = 4;
+  FILE_TYPE_JSON = 5;
+  FILE_TYPE_TEXT = 6;
+  FILE_TYPE_EXCEL = 7;
+}
+
+message GroundTruth {
+  oneof value {
+    string dataset_id = 1;
+    string text = 2;
+  }
+}
+
