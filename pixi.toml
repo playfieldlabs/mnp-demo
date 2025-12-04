@@ -11,7 +11,34 @@ proto-lint = { cmd = "cd proto && buf lint", description = "Lint protobuf files"
 proto-breaking = { cmd = "cd proto && buf breaking --against '.git#branch=main'", description = "Check for breaking changes" }
 proto-format = { cmd = "cd proto && buf format -w", description = "Format protobuf files" }
 proto-deps = { cmd = "cd proto && buf dep update", description = "Update buf dependencies" }
+backend = { cmd = "cd backend && PYTHONPATH=src python -m uvicorn agent_platform.main:app --host 0.0.0.0 --port 5005", description = "Run the backend server" }
+backend-dev = { cmd = "cd backend && PYTHONPATH=src python -m uvicorn agent_platform.main:app --host 0.0.0.0 --port 5005 --reload", description = "Run the backend server with auto-reload" }
+backend-check = { cmd = "cd backend && ruff check --fix . && mypy src/agent_platform", description = "Check Python code with ruff and mypy" }
+backend-format = { cmd = "cd backend && ruff format .", description = "Format Python code with ruff" }
+alembic-revision = { cmd = "cd backend && python -m alembic revision --autogenerate -m \"${@}\"", description = "Create a new migration (autogenerate). Usage: pixi run alembic-revision \"migration message\"" }
+alembic-upgrade = { cmd = "cd backend && python -m alembic upgrade head", description = "Upgrade database to latest migration" }
+alembic-downgrade = { cmd = "cd backend && python -m alembic downgrade -1", description = "Downgrade database by one migration" }
+alembic-current = { cmd = "cd backend && python -m alembic current", description = "Show current database revision" }
+alembic-history = { cmd = "cd backend && python -m alembic history", description = "Show migration history" }
 
 [dependencies]
 buf = ">=1.47.0"
+python = ">=3.11"
+sqlalchemy = "*"
+asyncpg = "*"
+alembic = "*"
+pydantic = ">=2.0"
+pydantic-settings = ">=2.0"
+anthropic = "*"
+httpx = "*"
+uvicorn = "*"
+ruff = "*"
+mypy = "*"
+pip = ">=25.3,<26"
+
+[pypi-dependencies]
+connect-python = ">=0.5.0"
+protoc-gen-connect-python = ">=0.5.0"
+starlette = ">=0.50.0, <0.51"
+protobuf = ">=6.33.1"
 
