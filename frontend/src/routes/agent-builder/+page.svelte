@@ -6,6 +6,7 @@
 	import { policyStore } from '$stores/policyStore';
 	import { datasetStore } from '$stores/datasetStore';
 	import { formatDateTime } from '$utils/format';
+	import ChatPanel from '$lib/components/ChatPanel.svelte';
 	type AgentDraft = {
 		id?: string;
 		name: string;
@@ -46,6 +47,7 @@
 	let showToolPicker = false;
 	let showPolicyPicker = false;
 	let showSettings = false;
+	let showChat = false;
 
 	onMount(() => {
 		agentStore.loadAgents();
@@ -130,22 +132,32 @@
 	$: selectedTools = $toolsStore.filter((t) => draft.toolIds.includes(t.id));
 </script>
 
-<div class="flex flex-col h-[calc(100vh-4rem)] max-w-[900px] mx-auto p-8">
-	<header class="flex items-center gap-3 mb-6">
-		<select
-			class="bg-transparent border border-border-strong rounded-sm px-4 py-2 text-text-secondary text-sm cursor-pointer focus:outline-none focus:border-text-muted"
-			bind:value={selectedAgentId}
-			on:change={() => agentStore.setActiveAgent(selectedAgentId || undefined)}
-		>
-			<option value="">New agent</option>
-			{#each $agentsList as agent}
-				<option value={agent.id}>{agent.name}</option>
-			{/each}
-		</select>
-		{#if draft.id}
-			<button class="bg-transparent border border-border-strong rounded-sm px-4 py-2 text-text-secondary text-sm cursor-pointer transition-all duration-150 hover:bg-surface-2 hover:text-text-primary" type="button" on:click={resetDraft}>New</button>
-		{/if}
-	</header>
+<div class="container">
+	<div class="main-content">
+		<header class="flex items-center gap-3 mb-6">
+			<select
+				class="bg-transparent border border-border-strong rounded-sm px-4 py-2 text-text-secondary text-sm cursor-pointer focus:outline-none focus:border-text-muted"
+				bind:value={selectedAgentId}
+				on:change={() => agentStore.setActiveAgent(selectedAgentId || undefined)}
+			>
+				<option value="">New agent</option>
+				{#each $agentsList as agent}
+					<option value={agent.id}>{agent.name}</option>
+				{/each}
+			</select>
+			{#if draft.id}
+				<button class="bg-transparent border border-border-strong rounded-sm px-4 py-2 text-text-secondary text-sm cursor-pointer transition-all duration-150 hover:bg-surface-2 hover:text-text-primary" type="button" on:click={resetDraft}>New</button>
+			{/if}
+			{#if draft.id}
+				<button
+					class="bg-transparent border border-border-strong rounded-sm px-4 py-2 text-text-secondary text-sm cursor-pointer transition-all duration-150 hover:bg-surface-2 hover:text-text-primary {showChat ? 'bg-surface-2 text-text-primary' : ''}"
+					type="button"
+					on:click={() => showChat = !showChat}
+				>
+					{showChat ? 'Hide' : 'Test'} Chat
+				</button>
+			{/if}
+		</header>
 
 	<div class="flex-1 flex flex-col gap-4">
 		<div class="flex flex-col bg-surface-1 border border-border-strong rounded-sm overflow-hidden">
@@ -309,9 +321,50 @@
 			</div>
 		{/if}
 	</div>
+	</div>
+
+	{#if showChat && draft.id}
+		<div class="chat-section">
+			<ChatPanel agentId={draft.id} datasetIds={[]} />
+		</div>
+	{/if}
 
 	{#if toast}
 		<div class="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 rounded-sm text-sm z-[1000] {toast.kind === 'success' ? 'bg-[#2D7D32] text-white' : 'bg-[#C62828] text-white'}">{toast.message}</div>
 	{/if}
 </div>
+
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		height: calc(100vh - 4rem);
+		max-width: 1400px;
+		margin: 0 auto;
+		padding: 2rem;
+		gap: 1rem;
+	}
+
+	.main-content {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.chat-section {
+		flex: 0 0 500px;
+		min-height: 0;
+	}
+
+	@media (min-width: 1024px) {
+		.container {
+			flex-direction: row;
+		}
+
+		.main-content {
+			max-width: 900px;
+		}
+	}
+</style>
 
