@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+	--font-mono: 'Azeret Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
+	
+	--color-surface: #FDFBF7;
+	--color-surface-1: #FFFFFF;
+	--color-surface-2: #F4F4F0;
+	--color-border-subtle: #E6E6E6;
+	--color-border-strong: #D4D4D4;
+	--color-text-primary: #4A4B46;
+	--color-text-secondary: #7C8674;
+	--color-text-muted: #A3A89E;
+}
+
+
+:root {
+	font-family: var(--font-mono);
+}
+
+body {
+	background-color: var(--color-surface);
+	color: var(--color-text-primary);
+	min-height: 100vh;
+	margin: 0;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
