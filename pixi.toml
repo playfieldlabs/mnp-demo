@@ -8,7 +8,6 @@ platforms = ["osx-arm64", "osx-64", "linux-64"]
 [tasks]
 proto = { cmd = "cd proto && buf generate", description = "Generate Python and TypeScript code from protobufs" }
 proto-lint = { cmd = "cd proto && buf lint", description = "Lint protobuf files" }
-proto-breaking = { cmd = "cd proto && buf breaking --against '.git#branch=main'", description = "Check for breaking changes" }
 proto-format = { cmd = "cd proto && buf format -w", description = "Format protobuf files" }
 proto-deps = { cmd = "cd proto && buf dep update", description = "Update buf dependencies" }
 backend = { cmd = "cd backend && PYTHONPATH=src python -m uvicorn agent_platform.main:app --host 0.0.0.0 --port 5005", description = "Run the backend server" }

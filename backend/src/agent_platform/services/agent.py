@@ -314,9 +314,13 @@ class AgentServiceImpl(AgentService):
             output_struct.update(json.loads(json.dumps(tool_call_dict["output"])))
             tool_call.output.CopyFrom(output_struct)
 
-            if isinstance(tool_call_dict.get("started_at"), datetime):
+            started_at_value = tool_call_dict.get("started_at")
+            if started_at_value:
                 started_at: Timestamp = Timestamp()
-                started_at.FromDatetime(tool_call_dict["started_at"])
+                if isinstance(started_at_value, datetime):
+                    started_at.FromDatetime(started_at_value)
+                elif isinstance(started_at_value, str):
+                    started_at.FromDatetime(datetime.fromisoformat(started_at_value.replace('Z', '+00:00')))
                 tool_call.started_at.CopyFrom(started_at)
 
             if "duration" in tool_call_dict:
