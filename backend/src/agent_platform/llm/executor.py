@@ -246,7 +246,9 @@ class AgentExecutor:
                         if delta_block_index not in thinking_blocks:
                             thinking_blocks[delta_block_index] = ""
                         thinking_blocks[delta_block_index] += delta.thinking
-                        signature: str = thinking_signatures.get(delta_block_index, "")
+                        signature: str = ""
+                        if delta_block_index in thinking_signatures:
+                            signature = thinking_signatures[delta_block_index]
                         yield {
                             "block": {
                                 "id": str(uuid.uuid4()),

@@ -294,9 +294,12 @@ class AgentServiceImpl(AgentService):
             block.assistant_message.CopyFrom(assistant_message)
         elif "thinking_block" in block_dict:
             thinking_dict: dict[str, Any] = block_dict["thinking_block"]
+            signature: str = ""
+            if "signature" in thinking_dict:
+                signature = thinking_dict["signature"]
             thinking_block = ThinkingBlock(
                 thinking=thinking_dict["thinking"],
-                signature=thinking_dict.get("signature", ""),
+                signature=signature,
             )
             block.thinking_block.CopyFrom(thinking_block)
         elif "tool_call" in block_dict:
@@ -314,8 +317,8 @@ class AgentServiceImpl(AgentService):
             output_struct.update(json.loads(json.dumps(tool_call_dict["output"])))
             tool_call.output.CopyFrom(output_struct)
 
-            started_at_value = tool_call_dict.get("started_at")
-            if started_at_value:
+            if "started_at" in tool_call_dict:
+                started_at_value: Any = tool_call_dict["started_at"]
                 started_at: Timestamp = Timestamp()
                 if isinstance(started_at_value, datetime):
                     started_at.FromDatetime(started_at_value)

@@ -13,18 +13,16 @@ class ToolRegistry:
         self._tools[tool.id] = tool
 
     async def get_tool(self, tool_id: str) -> Tool:
-        tool = self._tools.get(tool_id)
-        if tool is None:
+        if tool_id not in self._tools:
             raise ToolNotFoundError(f"Tool {tool_id} not found")
-        return tool
+        return self._tools[tool_id]
 
     async def get_tools(self, tool_ids: list[str]) -> list[Tool]:
         tools: list[Tool] = []
         for tool_id in tool_ids:
-            tool: Tool | None = self._tools.get(tool_id)
-            if tool is None:
+            if tool_id not in self._tools:
                 raise ToolNotFoundError(f"Tool {tool_id} not found")
-            tools.append(tool)
+            tools.append(self._tools[tool_id])
         return tools
 
     def list_tools(self) -> list[Tool]:
